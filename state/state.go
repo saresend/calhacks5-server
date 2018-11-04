@@ -144,10 +144,10 @@ func GetState() PublicState {
 	return publicState
 }
 
-func MakeVote(upvote string) {
-	if upvote == "true" {
+func MakeVote(upvote bool) {
+	if upvote {
 		publicState.Upvotes++
-	} else if upvote == "false" {
+	} else {
 		publicState.Downvotes++
 	}
 	// TODO: @Sam, verify no double votes, correct voter, add/subtract time, blockchain in general

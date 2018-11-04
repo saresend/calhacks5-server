@@ -92,7 +92,7 @@ func SetPrompts(w http.ResponseWriter, r *http.Request) {
 type VoteRequest struct {
 	Username    string
 	CurrentUser string
-	Upvote      string
+	Upvote      bool
 }
 
 func Vote(w http.ResponseWriter, r *http.Request) {
