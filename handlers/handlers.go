@@ -40,6 +40,8 @@ type Update struct {
 	CurrentUser     UserUpdate `json:"currentUser"`
 	NextUser        UserUpdate `json:"nextUser"`
 	TerminationTime int64      `json:"terminationTime"`
+	Upvotes         int        `json:"upvotes"`
+	Downvotes       int        `json:"downvotes"`
 }
 
 func Broadcast() {
@@ -53,7 +55,7 @@ func Broadcast() {
 		newNextUser = UserUpdate{newState.NextUser.Username, newState.NextUser.SelectedPrompt}
 	}
 	update := Update{newCurrentUser, newNextUser,
-		newState.TerminationTime}
+		newState.TerminationTime, newState.Upvotes, newState.Downvotes}
 	// b, _ := json.Marshal(newState)
 	// os.Stdout.Write(b)
 	// println()
