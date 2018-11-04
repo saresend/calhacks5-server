@@ -2,6 +2,7 @@ package state
 
 import (
 	"math/rand"
+	"strconv"
 	"time"
 )
 
@@ -21,6 +22,8 @@ type PublicState struct {
 	CurrentUser     *User
 	TerminationTime int64
 	NextUser        *User
+	Upvotes         int
+	Downvotes       int
 }
 
 var publicState PublicState
@@ -29,7 +32,7 @@ var activeUsers = make(map[string]*User)
 var streamingUsers = make(map[string]*User)
 
 func Init() {
-	publicState = PublicState{nil, time.Now().Unix(), nil}
+	publicState = PublicState{nil, time.Now().Unix(), nil, 0, 0}
 }
 
 func (user *User) AddUser() {
@@ -55,6 +58,11 @@ func RemoveUser(username string) {
 
 // SetPrompts chooses which prompts a user wants to broadcast on
 func SetPrompts(username string, prompts []int) {
+	print(username + " is opting into ")
+	for i := range prompts {
+		print(strconv.Itoa(prompts[i]) + ", ")
+	}
+	println()
 	if users[username] == nil {
 		println("Setting prompts for invalid user")
 		return
@@ -96,6 +104,10 @@ func UpdateState() {
 		if publicState.NextUser == nil {
 			publicState.NextUser = publicState.CurrentUser
 		}
+		if publicState.CurrentUser != publicState.NextUser {
+			publicState.Downvotes = 0
+			publicState.Upvotes = 0
+		}
 		publicState.CurrentUser = publicState.NextUser
 		publicState.NextUser = nil
 		publicState.TerminationTime = time.Now().Unix() + 15
@@ -130,4 +142,13 @@ func UpdateState() {
 
 func GetState() PublicState {
 	return publicState
+}
+
+func MakeVote(upvote bool) {
+	if upvote {
+		publicState.Upvotes++
+	} else {
+		publicState.Downvotes++
+	}
+	// TODO: @Sam, verify no double votes, correct voter, add/subtract time, blockchain in general
 }

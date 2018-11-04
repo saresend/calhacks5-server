@@ -18,6 +18,7 @@ func main() {
 	r.HandleFunc("/updates", handlers.SocketHandler)
 	r.HandleFunc("/getPrompts", handlers.GetPrompts).Methods("GET")
 	r.HandleFunc("/setPrompts", handlers.SetPrompts).Methods("POST")
+	r.HandleFunc("/vote", handlers.Vote).Methods("POST")
 	http.ListenAndServe(":8080", r)
 }
 

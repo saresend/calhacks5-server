@@ -86,3 +86,19 @@ func SetPrompts(w http.ResponseWriter, r *http.Request) {
 	}
 	state.SetPrompts(request.Username, request.Prompts)
 }
+
+type VoteRequest struct {
+	Username    string
+	CurrentUser string
+	upvote      bool
+}
+
+func Vote(w http.ResponseWriter, r *http.Request) {
+	request := new(VoteRequest)
+
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		return
+	}
+	state.MakeVote(request.upvote)
+}
